@@ -1,36 +1,27 @@
 package ru.vitaSoft.restController;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
+
 import java.util.*;
 
 @org.springframework.web.bind.annotation.RestController
 public class RestController {
+    private final Logger logger = LoggerFactory.getLogger(RestController.class);
 
     //Ввести N строк. Упорядочить и вывести строки в порядке возрастания значений их длины.
     // В случае, если длины строк совпадают - упорядочить их в лексикографическом порядке
     @PostMapping("json")
     public List<String> getMessages(@RequestBody List<String> list) {
-        for (int i = list.size() - 1; i > 0; i--) {
-            for (int j = 0; j < i; j++) {
-                if (list.get(j).length() == list.get(j + 1).length()) {
-                    Collections.sort(list);
-                    break;
-                }
-            }
-        }
-        for (int i = list.size() - 1; i > 0; i--) {
-            for (int j = 0; j < i; j++) {
-                if (list.get(j).length() > list.get(j + 1).length()) {
-                    String tmp = list.get(j);
-                    list.set(j, list.get(j + 1));
-                    list.set(j + 1, tmp);
-                }
-            }
-        }
+
+        logger.info("list: " + list.toString());
+        Collections.sort(list);
+        list.sort((String s1, String s2) -> s1.length() - s2.length());
 
         List<String> resultList = new ArrayList<>();
         for (String value : list) {
